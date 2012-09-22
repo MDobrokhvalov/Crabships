@@ -10,6 +10,7 @@ body {
 }
 
 .map {
+
    right: 0;
    top: 112px;
 }

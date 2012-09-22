@@ -7,8 +7,6 @@
 
        <div class="content-body">edited by <b>{{content.username}}</b> at {{content.created}}</div>
    </div>
-   <br>
-   <br> 
-   <br>
+
    {% endfor %}
    {% endblock %}

@@ -3,23 +3,13 @@
 <head>
   <link type="text/css" rel="stylesheet" href="/static/main.css" />
 
-  <title>MD WIKI PROJECT</title>
+  <title>MD PROJECT</title>
 </head>
 
 <body>
   <a href="/blog" class="main-title">
     JUST BLOG IT!
   </a>
-    
-
-   {% if path and user %}
-   <div class="page_history-area">
-      <a class="login-link" href="/_edit{{path}}">edit</a>
-      |
-      <a class="login-link" href="/_history{{path}}">history</a>
-    {% endif %}
-  </div>
-
 
   <div class="login-area">
     {% if user %}
@@ -30,7 +20,6 @@
       <a class="login-link" href="/signup">signup</a>
     {% endif %}
   </div>
-
 
   <div id="content">
   {% block content %}

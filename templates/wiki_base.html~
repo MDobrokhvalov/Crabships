@@ -12,7 +12,7 @@
   </a>
     
 
-   {% if path and user %}
+   {% if path %}
    <div class="page_history-area">
       <a class="login-link" href="/_edit{{path}}">edit</a>
       |

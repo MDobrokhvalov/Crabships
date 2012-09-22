@@ -1,0 +1,20 @@
+{% extends "wiki_base.html" %}
+
+{% block content %}
+
+    <form method="post">
+      <label>
+        <div>Статья</div>
+        <input type="text" name="path" value="{{path}}">
+      </label>
+
+      <label>
+        <div>Содержание</div>
+        <textarea name="content">{{content}}</textarea>
+      </label>
+
+      <div class="error">{{error}}</div>
+
+      <input type="submit">
+    </form>
+{% endblock %}

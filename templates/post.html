@@ -1,0 +1,23 @@
+<div class="post">
+  <div class="post-heading">
+      <div class="post-title">
+        {{p.username}}
+      </div>
+
+      <div class="post-date">
+        {{p.created.strftime('%H:%M %b %d')}}
+      </div>
+
+
+
+      <div class="post-content">
+        {{p._render_text | safe}}
+      </div>
+  </div>
+
+
+  <div class="post-delete">
+       <a href="{{paths}}?p={{p.key().id()}}" name="p" class="post-delete">{{"delete"}}</a>
+  </div>
+</div>
+

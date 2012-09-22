@@ -1,0 +1,20 @@
+   {% extends "wiki_base.html" %}
+   {% block content %}
+
+
+<h2>Recent users</h2>
+   {% for content in subjects %}
+    
+
+       <div class="wiki-date">{{content.name}}</div>
+   {% endfor %}
+<br><br><br>
+<a href="/new_wiki" class="main-title">
+    Create your own Wiki Page!
+  </a>
+
+   {%if img_url %}
+      <img src="{{img_url}}">
+   {% endif %}
+
+   {% endblock %}
