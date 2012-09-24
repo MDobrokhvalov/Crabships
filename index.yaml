@@ -10,6 +10,12 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
+- kind: Game
+  ancestor: yes
+  properties:
+  - name: performance
+    direction: desc
+
 - kind: Post
   ancestor: yes
   properties:

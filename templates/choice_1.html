@@ -1,0 +1,32 @@
+{% extends "game_base.html" %}
+   {% block content %}
+
+
+{% if 6-dva-odin == 1 %}
+<img src="http://www.crabships.appspot.com/serve/AMIfv97JTnUs4ub5nRk6O_n6pc2x1ACbJnd3nWeRNZzxg1zZslsR3L6pxe4YAAzPgUj209uggfdRf1qVQAiBsut5jkA2wfSdU_TNSEvYzqORFMkJgdBQV10J29aNqTTojkaHlYvoLrXTmaZTUWmBUWtsovHMIyPnkEoUowjQFHAGa7V20g0Bcmc" alt="empty_1">
+
+{% endif %}
+
+
+
+{% if 6-dva-odin == 2 %}
+<img src="http://www.crabships.appspot.com/serve/AMIfv97zyOVdjS8oIx64F15wWtrtivJojGfDmUCGKxVhUoZCW5V63Aondh-nMb62tdQXnOUyqTBNkjKXNqf1o31uPEvA5d-BFWCAmGvd5pdDopK3J7WNCrF9yDrTULaoof-Cu_BDzvipDQednrWuzP9PtopCDoiqoksWJziPSR85zXetKZr6MuM" alt="empty_2">
+
+{% endif %}
+    
+
+
+{% if 6-dva-odin == 3 %}
+<img src="http://www.crabships.appspot.com/serve/AMIfv95GOrNolXfmKNlnx3DjrYvOJ2vC_lvz9Y3YkT_6RI8UzxhY2JyvW3RqK8i8eXdR3YI5bhde4Z5xfK4kBypArvf8TZMhaXrLqSnflBvSb8yxOU3ceuv93aNZN3ozNNHk9vXKypbz_wc42_kq4yMowaXY1GudsLIkQfiTU-9HMFR2ATV76Lw
+" alt="empty_3">
+
+{% endif %}
+
+       <a href="/monty_hall?p={{odin}}" name="p" class="post-choice{{odin}}">choice {{odin}}</a>
+       <a href="/monty_hall?p={{dva}}" name="p" class="post-choice{{dva}}">choice {{dva}}</a>
+
+<div class="desc"><br><br><br><br>Вы выбрали дверь №{{odin}}.<br>Монти Холл открывает дверь №{{6-dva-odin}}.<br>И она пуста!!Вы можете поменять свой выбор. Оставите ли Вы свой выбор на двери №{{odin}} или поменяете свой выбор?</div>
+      
+
+   {% endblock %}
+

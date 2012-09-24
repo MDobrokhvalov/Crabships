@@ -1,0 +1,16 @@
+   {% extends "game_base.html" %}
+   {% block content %}
+
+
+<h2>Top 10 gamers</h2>
+   {%  for i in range(length) %}
+   <div class="content">
+
+       <pre class="content-body"><b>{{i+1}}.</b>{{dict_of_fame[sort_list[i]]}}</pre>
+       <pre class="content-body">Score:{{sort_list[i]}}</pre>
+<hr>
+
+   </div>
+   {% endfor %}
+
+   {% endblock %}

@@ -9,6 +9,7 @@ body {
     color: #333;
 }
 
+
 .map {
    right: 0;
    top: 112px;
@@ -29,6 +30,21 @@ body {
     position: absolute;
     top: 10px;
     right: 10px;
+}
+
+
+.stat-area {
+    font-size: 13px;
+    color: gray;
+    position: absolute;
+    top: 250px;
+    right: -150px;
+}
+
+
+.stats {
+
+    text-decoration: none;
 }
 
 .login-link {
@@ -118,6 +134,34 @@ input[type=submit] {
     font-size: 24px;
     color: #999;
 }
+
+
+.post-choice1 {
+    position: relative;
+    left: 100px;
+    font-size: 24px;
+    color: #999;
+}
+
+.post-choice2 {
+    position: absolute;
+    right: 360px;
+    font-size: 24px;
+    color: #999;
+}
+
+.post-choice3 {
+    position: absolute;
+    right: 130px;
+    font-size: 24px;
+    color: #999;
+}
+
+.desc {
+    text-align: center;
+    font-size: 24px;
+}
+
 
 .wiki-date {
    

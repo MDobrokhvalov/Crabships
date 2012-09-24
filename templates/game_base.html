@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link type="text/css" rel="stylesheet" href="/static/main.css" />
+
+  <title>MD WIKI PROJECT</title>
+</head>
+
+<body>
+   <a href="/monty_hall" class="main-title">
+    PLAY IT!
+  </a>
+    {% if round_game %}
+<h2>Round {{round_game}}</h2>
+    {% endif %}
+  <div class="login-area">
+    {% if user %}
+      {{user.name}} (<a class="login-link" href="/logout">logout</a>)
+    {% else %}
+      <a class="login-link" href="/login">login</a>
+      |
+      <a class="login-link" href="/signup">signup</a>
+    {% endif %}
+  </div>
+
+
+  <div id="content">
+  {% block content %}
+  {% endblock %}
+  </div>
+
+
+{% if round_game %}
+<div class="stat-area">statistics:<br>wins:{{wins}}<br>performance:{{performance}}<br> 
+ <a href="/monty_hall/stats" name="p" class="stats">LeaderBoard</a><br>
+ <a href="/_null/monty_hall" name="p" class="stats">Обнулиться</a>
+  {% endif %}
+</div>
+</body>
+
+</html>

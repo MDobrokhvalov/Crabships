@@ -11,7 +11,7 @@ This is a web application built on google app engine.
 USED:
 
 1. Languages: Python
-2. Technical Tools: Google App Engine (GAE), Django
+2. Technical Tools: Google App Engine (GAE)
 3. Designing Tools: HTML, CSS
 
 

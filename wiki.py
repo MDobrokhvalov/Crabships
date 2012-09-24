@@ -1,9 +1,16 @@
+
+import urllib
+
+from google.appengine.ext import blobstore
+from google.appengine.ext.webapp import blobstore_handlers
+
 import os
 import re
 import random
 import hashlib
 import hmac
 from string import letters
+from random import randint
 
 from xml.dom import minidom
 import urllib2
@@ -478,6 +485,151 @@ def convert(data):
    return lon, lat
     
 
+###################### GAME
+
+class Game(db.Model):
+    name = db.StringProperty(required = True)
+    round_game = db.IntegerProperty(required = True)
+    wins = db.IntegerProperty(required = True)
+    performance = db.FloatProperty(required = True)
+  
+   
+everythings = {}
+
+
+def new_round(self):
+    key = 'round'
+    if key in everythings:
+        round_game = everythings[key]
+    else:
+        uid = self.read_secure_cookie('user_id')
+        username = User.get_by_id(int(uid), parent = users_key()).name
+        k = db.Key.from_path("username", username)
+        g = Game.all().ancestor(k).get()
+        if g:
+            round_game = g.round_game
+            wins = g.wins
+            performance = g.performance
+        else:
+            round_game = 1
+            wins = 0
+            performance = 0.0
+            x = Game(parent = k, name = username, round_game = round_game, wins = wins, performance = performance)
+            x.put()  
+        g = Game.all().ancestor(k).get()
+    return g
+
+
+def truthing():
+    key = 'truth'
+    if key in everythings:
+        truth = everythings[key]
+    else:
+        truth = randint(1,3)
+        everythings[key] = truth
+    return truth
+
+def format_perf(data):
+    return "{0:.0f}%".format(data*100)
+
+
+class MontyHall(BlogHandler):
+    def get(self):
+        truth = truthing()
+        choice = self.request.get('v')
+        g = new_round(self)
+        if choice:
+            if int(choice) == truth:
+                show = randint(1,3)
+                while show == truth:
+                    show = randint(1,3)
+                ubrat = 6 - truth - show
+                self.render('choice_1.html', odin = int(choice), dva = ubrat, round_game = g.round_game, wins = g.wins, performance = format_perf(g.performance))
+            else:
+                show = randint(1,3)
+                while show == int(choice) or show == truth:
+                    show = randint(1,3)
+                self.render('choice_1.html', odin = int(choice), dva = truth, round_game = g.round_game, wins = g.wins, performance = format_perf(g.performance))
+        p = self.request.get('p')
+        if p:
+            p = int(self.request.get('p'))	
+            if p == truth:
+                g.round_game += 1
+                g.wins += 1
+                g.performance = float(g.wins)/float(g.round_game)
+                g.put()
+                everythings.clear()
+                self.render('pobeda.html', odin =truth, round_game = g.round_game, wins = g.wins, performance = format_perf(g.performance))
+            if p != truth:
+                g.round_game += 1
+                g.performance = float(g.wins)/float(g.round_game)
+                g.put()
+                everythings.clear()
+                self.render('proigrish.html',odin =truth, round_game = g.round_game, wins = g.wins, performance = format_perf(g.performance))
+        if not p and not choice:
+            self.render('game.html', round_game =g.round_game, wins = g.wins, performance = format_perf(g.performance))
+
+
+
+class NullMontyHall(BlogHandler):
+    def get(self):
+        uid = self.read_secure_cookie('user_id')
+        username = User.get_by_id(int(uid), parent = users_key()).name
+        k = db.Key.from_path("username", username)
+        g = Game.all().ancestor(k).get()
+        db.delete(g)
+        everythings.clear()
+        self.redirect('/monty_hall')
+
+
+
+class LeaderBoard(BlogHandler):
+    def get(self):
+        k = Game.all().fetch(100)
+        list_of_fame = []
+        for i in k:
+            x = i.parent_key()
+            if x not in list_of_fame:
+                list_of_fame.append(x)
+        new_list = []
+        for i in list_of_fame:
+            g = Game.all().ancestor(i).order('-performance').get()
+            new_list.append(g)
+        dict_of_fame = {}
+        sort_list = []
+        for i in new_list:
+            dict_of_fame[format_perf(i.performance)] = i.name
+            sort_list.append(format_perf(i.performance))
+        sort_list = sorted(sort_list, reverse=True)
+        length = len(sort_list)
+        self.render('leaderboard.html', length = length, sort_list = sort_list, dict_of_fame = dict_of_fame)
+
+
+
+################# UPLOADER	
+
+class UpHandler(webapp2.RequestHandler):
+  def get(self):
+    upload_url = blobstore.create_upload_url('/upload')
+    self.response.out.write('<html><body>')
+    self.response.out.write('<form action="%s" method="POST" enctype="multipart/form-data">' % upload_url)
+    self.response.out.write("""Upload File: <input type="file" name="file"><br> <input type="submit"
+        name="submit" value="Submit"> </form></body></html>""")
+
+class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
+  def post(self):
+    upload_files = self.get_uploads('file')  # 'file' is file upload field in the form
+    blob_info = upload_files[0]
+    self.redirect('/serve/%s' % blob_info.key())
+
+class ServeHandler(blobstore_handlers.BlobstoreDownloadHandler):
+  def get(self, resource):
+    resource = str(urllib.unquote(resource))
+    blob_info = blobstore.BlobInfo.get(resource)
+    self.send_blob(blob_info)
+
+        
+        
 
 
 
@@ -487,6 +639,9 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/signup', Register),
                                ('/login', Login),
                                ('/logout', Logout),
+                               ('/_null/monty_hall', NullMontyHall),
+                               ('/monty_hall', MontyHall),
+                               ('/monty_hall/stats', LeaderBoard),
                                ('/_del' + PAGE_RE, DeleteHandler),
                                ('/_history' + PAGE_RE, HistoryPage), 
                                ('/_edit' + PAGE_RE, EditPage),
@@ -494,6 +649,9 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/wiki', RecentWiki),
                                ('/users', RecentUsers),
                                ('/delete_all', DeleteAll),
+                               ('/uploads', UpHandler),
+                               ('/upload', UploadHandler),
+                               ('/serve/([^/]+)?', ServeHandler),
                                (PAGE_RE, WikiPage),
                               ],
                               debug=True)
